@@ -1,6 +1,7 @@
 import pkgutil
 import pickle
 import urllib
+import importlib.util
 from tqdm import tqdm
 from ..exceptions import DataConfigErrorException
 
@@ -32,10 +33,15 @@ def load_data():
             return True
 
         return DOWNLOAD
-
+        
     ret = []
     for data in pkgutil.iter_modules(__path__):
-        data = data.module_finder.find_loader(data.name)[0].load_module()
+        
+        _spec = importlib.util.find_spec(f"{__package__}.{data.name}")
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        data = _mod
+        
         if hasattr(data, "NAME") and hasattr(data, "DOWNLOAD"):  # is a data module
             tmp = {"name": data.NAME}
             if callable(data.DOWNLOAD):
