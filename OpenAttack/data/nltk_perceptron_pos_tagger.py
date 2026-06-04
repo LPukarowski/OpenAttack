@@ -15,6 +15,9 @@ DOWNLOAD = make_zip_downloader(URL, "averaged_perceptron_tagger.pickle")
 
 
 def LOAD(path):
-    ret = __import__("nltk").tag.PerceptronTagger(load=False)
-    ret.load("file:" + os.path.join(path, "averaged_perceptron_tagger.pickle"))
+    import nltk
+    import pickle
+    ret = nltk.tag.PerceptronTagger(load=False)
+    with open(os.path.join(path, "averaged_perceptron_tagger.pickle"), "rb") as f:
+        ret.__dict__.update(pickle.load(f).__dict__)
     return ret.tag
