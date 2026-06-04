@@ -98,7 +98,7 @@ class BERTAttacker(ClassificationAttacker):
         words, sub_words, keys = self._tokenize(feature.seq, tokenizer)
         max_length = self.max_length
         # original label
-        inputs = tokenizer.encode_plus(feature.seq, None, add_special_tokens=True, max_length=max_length, truncation=True)
+        inputs = tokenizer(feature.seq, None, add_special_tokens=True, max_length=max_length, truncation=True, return_tensors=None)
         input_ids, _ = torch.tensor(inputs["input_ids"]), torch.tensor(inputs["token_type_ids"])
 
         orig_probs = torch.Tensor(victim.get_prob([feature.seq]))
