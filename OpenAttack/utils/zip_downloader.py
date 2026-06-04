@@ -1,6 +1,7 @@
 import urllib
 import zipfile
 import os
+import ssl
 from tqdm import tqdm
 
 
@@ -14,7 +15,6 @@ def make_zip_downloader(URL : str, file_list=None, resource_name = None):
     use_source = not (URL.startswith("http://") or URL.startswith("https://"))
     if use_source and URL.startswith("/"):
         URL = URL[1:]
-
     def DOWNLOAD(path : str, source : str):
         if not source.endswith("/"):
             source = source + "/"
@@ -22,13 +22,16 @@ def make_zip_downloader(URL : str, file_list=None, resource_name = None):
             remote_url = source + URL
         else:
             remote_url = URL
-
         if resource_name is None:
             name = os.path.basename(path)
         else:
             name = resource_name
         
-        with urllib.request.urlopen(remote_url) as fin:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        with urllib.request.urlopen(remote_url, context=ctx) as fin:
             CHUNK_SIZE = 4 * 1024
             total_length = int(fin.headers["content-length"])
             with open(path + ".zip", "wb") as ftmp:
@@ -52,5 +55,4 @@ def make_zip_downloader(URL : str, file_list=None, resource_name = None):
         zf.close()
         os.remove(path + ".zip")
         return
-
     return DOWNLOAD
