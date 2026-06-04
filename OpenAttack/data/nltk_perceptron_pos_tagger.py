@@ -19,5 +19,8 @@ def LOAD(path):
     import pickle
     ret = nltk.tag.PerceptronTagger(load=False)
     with open(os.path.join(path, "averaged_perceptron_tagger.pickle"), "rb") as f:
-        ret.__dict__.update(pickle.load(f).__dict__)
+        weights = pickle.load(f)
+    ret.model.weights = weights[0]
+    ret.tagdict = weights[1]
+    ret.classes = weights[2]
     return ret.tag
