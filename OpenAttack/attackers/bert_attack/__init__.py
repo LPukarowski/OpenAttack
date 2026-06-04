@@ -162,7 +162,7 @@ class BERTAttacker(ClassificationAttacker):
                 temp_replace = final_words
                 temp_replace[top_index[0]] = substitute
                 temp_text = tokenizer.convert_tokens_to_string(temp_replace)
-                inputs = tokenizer.encode_plus(temp_text, None, add_special_tokens=True, max_length=max_length, truncation=True)
+                inputs = tokenizer(temp_text, None, add_special_tokens=True, max_length=max_length, truncation=True, return_tensors=None)
                 input_ids = torch.tensor(inputs["input_ids"]).unsqueeze(0).to(self.device)
                 seq_len = input_ids.size(1)
                 
