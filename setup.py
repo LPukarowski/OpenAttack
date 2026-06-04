@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = "test"
+VERSION = "1.0.0"
 with open("OpenAttack/version.py", "r") as fver:
     VERSION = fver.read().replace("VERSION", "").replace("=", "").replace("\"", "").strip()
 
