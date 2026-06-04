@@ -9,7 +9,7 @@ class DataManager(object):
     """
     DataManager is a module that manages all the resources used in Attacker, Metric, Substitute, TextProcessors and utils.
 
-    It reads configuration files in OpenAttack/data/\*.py, and initialize these resources when you load them.
+    It reads configuration files in OpenAttack/data/*.py, and initialize these resources when you load them.
 
     You can use 
 
